@@ -1,0 +1,52 @@
+/** Mirrors apps/api/app/core/permissions.py. UI checks are advisory; the API is authoritative. */
+export const P = {
+  TENANT_MANAGE: "tenant.manage",
+  USER_MANAGE: "user.manage",
+  ROLE_MANAGE: "role.manage",
+  AUDIT_READ: "audit.read",
+  OWNER_READ: "owner.read",
+  OWNER_WRITE: "owner.write",
+  OWNER_VERIFY: "owner.verify",
+  PROPERTY_READ: "property.read",
+  PROPERTY_READ_ALL: "property.read_all",
+  PROPERTY_WRITE: "property.write",
+  PROPERTY_ASSIGN: "property.assign",
+  DEAL_READ: "deal.read",
+  DEAL_READ_ALL: "deal.read_all",
+  DEAL_WRITE: "deal.write",
+  DEAL_ASSIGN: "deal.assign",
+  DEAL_STAGE_MOVE: "deal.stage.move",
+  DEAL_STAGE_SKIP: "deal.stage.skip",
+  DEAL_CHECKLIST_BYPASS: "deal.checklist.bypass",
+  DEAL_ACTIVE_OVERRIDE: "deal.active_override",
+  DUE_DILIGENCE_REVIEW: "due_diligence.review",
+  WORKFLOW_CONFIGURE: "workflow.configure",
+  TASK_READ: "task.read",
+  TASK_WRITE: "task.write",
+  DOCUMENT_READ: "document.read",
+  DOCUMENT_UPLOAD: "document.upload",
+  DOCUMENT_REVIEW: "document.review",
+  DOCUMENT_SENSITIVE_READ: "document.sensitive.read",
+  DOCUMENT_SENSITIVE_UPLOAD: "document.sensitive.upload",
+  DOCUMENT_GRANT: "document.grant",
+  DOCUMENT_CONFIGURE: "document.configure",
+  GEOMETRY_DRAFT: "geometry.draft",
+  GEOMETRY_APPROVE: "geometry.approve",
+  PAYMENT_READ: "payment.read",
+  PAYMENT_WRITE: "payment.write",
+  PAYMENT_APPROVE: "payment.approve",
+  SITE_VISIT_READ: "site_visit.read",
+  SITE_VISIT_WRITE: "site_visit.write",
+  INVENTORY_READ: "inventory.read",
+  INVENTORY_WRITE: "inventory.write",
+  INVENTORY_APPROVE: "inventory.approve",
+  SCORING_CONFIGURE: "scoring.configure",
+  REPORT_READ: "report.read",
+  GEOGRAPHY_MANAGE: "geography.manage",
+} as const;
+
+export type Permission = (typeof P)[keyof typeof P];
+
+export function can(permissions: readonly string[] | undefined, isSystemAdmin: boolean, p: Permission): boolean {
+  return isSystemAdmin || (permissions ?? []).includes(p);
+}
