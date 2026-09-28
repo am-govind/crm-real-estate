@@ -1,0 +1,32 @@
+{
+  "expo": {
+    "name": "Land Deal CRM",
+    "slug": "landcrm",
+    "scheme": "landcrm",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "ios": {
+      "bundleIdentifier": "com.landcrm.field",
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Your location is recorded when you check in to and out of site visits.",
+        "NSCameraUsageDescription": "Take photos during site visits.",
+        "NSPhotoLibraryUsageDescription": "Attach photos to site visits."
+      }
+    },
+    "android": {
+      "package": "com.landcrm.field",
+      "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION", "CAMERA"]
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      ["expo-location", { "locationWhenInUsePermission": "Your location is recorded when you check in to and out of site visits." }],
+      ["expo-image-picker", { "cameraPermission": "Take photos during site visits." }],
+      "expo-notifications"
+    ],
+    "experiments": { "typedRoutes": false }
+  }
+}
