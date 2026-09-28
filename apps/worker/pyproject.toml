@@ -1,0 +1,22 @@
+[project]
+name = "landcrm-worker"
+version = "0.1.0"
+description = "Background worker for the Land Deal CRM (document processing, reminders, map jobs)"
+requires-python = ">=3.11"
+dependencies = [
+  "landcrm-api",
+  "redis>=5.0",
+]
+
+[project.scripts]
+landcrm-worker = "landcrm_worker.main:main"
+
+[tool.uv.sources]
+landcrm-api = { path = "../api", editable = true }
+
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["landcrm_worker*"]
