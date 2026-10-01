@@ -74,7 +74,15 @@ def main() -> None:
     if settings.queue_backend == "redis":
         import redis
 
-        redis_client = redis.Redis.from_url(settings.redis_url)
+        # BLPOP intentionally waits for up to five seconds. Keep the socket
+        # timeout longer than that blocking interval so an idle queue does not
+        # terminate the worker with redis.exceptions.TimeoutError.
+        redis_client = redis.Redis.from_url(
+            settings.redis_url,
+            socket_timeout=10,
+            socket_connect_timeout=10,
+            retry_on_timeout=True,
+        )
     log.info("worker started (queue=%s)", settings.queue_backend)
 
     last_sweep = 0.0
