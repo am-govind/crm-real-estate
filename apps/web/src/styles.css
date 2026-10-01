@@ -110,3 +110,45 @@ h3 { font-size: 15px; margin: 0; }
 .trace-canvas { position: relative; display: inline-block; cursor: crosshair; }
 .trace-canvas img { max-width: 100%; display: block; }
 .trace-canvas svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* Compact screens: keep the CRM usable on phones and narrow browser previews. */
+@media (max-width: 700px) {
+  :root { font-size: 14px; }
+
+  .app { display: block; min-height: 100dvh; }
+  .sidebar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+    padding: 8px;
+    overflow-x: auto;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, .18);
+  }
+  .sidebar .brand { flex: 0 0 auto; padding: 6px 10px; margin-right: 4px; }
+  .sidebar a { flex: 0 0 auto; padding: 8px 10px; }
+  .sidebar .spacer { display: none; }
+  .sidebar select { width: auto; min-width: 130px; }
+  .sidebar > .small { display: none; }
+  .sidebar button { flex: 0 0 auto; }
+
+  .main { width: 100%; min-width: 0; padding: 16px 12px 24px; overflow-x: hidden; }
+  .page-header { align-items: flex-start; flex-direction: column; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .row { min-width: 0; }
+  .card { min-width: 0; }
+  .card-header, .card-body { padding-left: 12px; padding-right: 12px; }
+  .stat { min-width: 0; }
+  .table-wrap, .table { overflow-x: auto; }
+  .table { display: block; white-space: nowrap; }
+  .kv-row { grid-template-columns: 1fr; gap: 2px; }
+  .map { height: 58vh; min-height: 300px; }
+  .modal { width: calc(100vw - 24px); max-height: 85dvh; }
+  .modal-wide { width: calc(100vw - 24px); }
+  .toasts { left: 12px; right: 12px; bottom: 12px; }
+  .toast { max-width: none; }
+}
