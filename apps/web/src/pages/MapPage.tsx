@@ -21,7 +21,7 @@ export function MapPage() {
         subtitle="Pins are coloured by deal stage when a deal is active, otherwise by property status. Boundaries show approved geometry only."
         actions={<Select value={status} onChange={(e) => setStatus(e.target.value)} options={PROPERTY_STATUSES} placeholder="All statuses" />}
       />
-      <div className="grid" style={{ gridTemplateColumns: "1fr 300px" }}>
+      <div className="grid map-layout">
         <MapView
           pins={pins.data}
           parcels={parcels.data}
