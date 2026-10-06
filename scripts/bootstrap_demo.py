@@ -251,3 +251,6 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+# Local Git-change test comment; this has no runtime effect.
+# Local Git-change test comment; this has no runtime effect.
