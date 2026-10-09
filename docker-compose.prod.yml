@@ -1,0 +1,67 @@
+services:
+  postgres:
+    image: postgis/postgis:16-3.4
+    container_name: landcrm-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-landcrm}
+      POSTGRES_USER: ${POSTGRES_USER:-landcrm}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}
+    volumes:
+      - landcrm_postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: landcrm-redis
+    volumes:
+      - landcrm_redis_data:/data
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: landcrm-api
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    environment:
+      LANDCRM_ENV: production
+      LANDCRM_DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-landcrm}:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}@postgres:5432/${POSTGRES_DB:-landcrm}
+      LANDCRM_REDIS_URL: redis://redis:6379/0
+      LANDCRM_QUEUE_BACKEND: redis
+      LANDCRM_SESSION_SECRET: ${LANDCRM_SESSION_SECRET:?LANDCRM_SESSION_SECRET must be set}
+      LANDCRM_SESSION_COOKIE_SECURE: "true"
+      LANDCRM_CORS_ORIGINS: ${LANDCRM_CORS_ORIGINS:?LANDCRM_CORS_ORIGINS must be set}
+      LANDCRM_PUBLIC_API_URL: ${LANDCRM_PUBLIC_API_URL:?LANDCRM_PUBLIC_API_URL must be set}
+      LANDCRM_WEB_APP_URL: ${LANDCRM_WEB_APP_URL:?LANDCRM_WEB_APP_URL must be set}
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_started
+      redis:
+        condition: service_started
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: landcrm-worker
+    command: ["landcrm-worker"]
+    environment:
+      LANDCRM_ENV: production
+      LANDCRM_DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-landcrm}:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}@postgres:5432/${POSTGRES_DB:-landcrm}
+      LANDCRM_REDIS_URL: redis://redis:6379/0
+      LANDCRM_QUEUE_BACKEND: redis
+      LANDCRM_SESSION_SECRET: ${LANDCRM_SESSION_SECRET:?LANDCRM_SESSION_SECRET must be set}
+      LANDCRM_SESSION_COOKIE_SECURE: "true"
+    depends_on:
+      postgres:
+        condition: service_started
+      redis:
+        condition: service_started
+    restart: unless-stopped
+
+volumes:
+  landcrm_postgres_data:
+  landcrm_redis_data:
